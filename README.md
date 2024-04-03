@@ -1,5 +1,5 @@
 # Simple Test for Chess Homework
-To start the game compile and run the [Main.java](./Main.java) file. (For better experience use **Intellij IDEA** as it supports the program uses unicode characters which can not be rendered in any console)
+To start the game compile and run the [Main.java](./am/aua/chess/Main.java) file. (For better experience use **Intellij IDEA** as it supports unicode characters which can not be rendered in other terminals)
 # JDK Version: 21.1.0
 # Demo Images
 ![Demo Image1](./.media/chess_demo.png)
