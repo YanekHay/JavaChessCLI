@@ -86,16 +86,16 @@ public class ChessConsole {
         return switch (piece.toString()) {
             case "P" -> "\u2659";
             case "p" -> "\u265F";
-            case "R" -> "\u2656";
-            case "r" -> "\u265C";
+            case "R","S" -> "\u2656";
+            case "r","s" -> "\u265C";
             case "N" -> "\u2658";
             case "n" -> "\u265E";
             case "B" -> "\u2657";
             case "b" -> "\u265D";
             case "Q" -> "\u2655";
             case "q" -> "\u265B";
-            case "K" -> "\u2654";
-            case "k" -> "\u265A";
+            case "K","L" -> "\u2654";
+            case "k","l" -> "\u265A";
             default -> "\u2009\u200A\u200A\u200A\u2009"; // Wide space
         };
     }
@@ -151,13 +151,6 @@ public class ChessConsole {
      * Starts the chess game and handles user input.
      */
     public void play(){
-        play("rnbqkbnrpppppppp                                PPPPPPPPRNBQKBNR");
-    }
-    /**
-     * @param positioning The positioning string to start the game with.
-     * Starts the chess game and handles user input.
-     */
-    public void play(String positioning){
         Scanner sc = new Scanner(System.in);
         String inputLine;
 
@@ -168,12 +161,38 @@ public class ChessConsole {
 
             inputLine = sc.nextLine();
             String[] input = inputLine.split(" ");
+            Position p1 = null, p2 = null;
+
             if (input.length == 1){
-                print(Position.generateFromString(input[0]), game.reachableFrom(Position.generateFromString(input[0])));
+                if (input[0].equals("resign")) {
+                    System.out.println(game.getTurn() + " has resigned.");
+                    return;
+                }
+                p1 = Position.generateFromString(input[0]);
+
+                if (input[0].equals("debug")) {
+                    debug();
+                    print();
+                    continue;
+                }
+
+                assert p1 != null;
+                if (game.getPieceAt(p1).getColor() != game.getTurn()) {
+                    System.out.println("That piece belongs to the opponent.");
+                    continue;
+                }
+                print(p1, game.reachableFrom(Position.generateFromString(input[0])));
             }
             else if (input.length == 2){
-                Move m = new Move(Position.generateFromString(input[0]),
-                                  Position.generateFromString(input[1]));
+                p2 = Position.generateFromString(input[1]);
+
+                assert p2 != null;
+                if (game.getPieceAt(p2).getColor() != game.getTurn()) {
+                    System.out.println("That piece belongs to the opponent.");
+                    continue;
+                }
+                Move m = new Move(p1, p2);
+
                 boolean success = game.performMove(m);
                 if (!success){
                     System.out.println("Invalid move. Please try again.");
@@ -181,6 +200,11 @@ public class ChessConsole {
                 print();
             }
         }
+    }
+
+    public void debug() {
+        System.out.println("This method is for testing purposes.");
+        //System.out.println(game.getAllDestinationsByColor(Chess.PieceColor.WHITE).length);
     }
 
 }

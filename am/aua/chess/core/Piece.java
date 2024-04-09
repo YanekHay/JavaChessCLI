@@ -4,7 +4,7 @@ package am.aua.chess.core;
  * It contains methods to get the color of the piece and all possible destinations for the piece.
  * The class is extended by specific piece classes such as Bishop, King, Knight, Pawn, Queen, and Rook.
  */
-public class Piece {
+public class Piece implements Cloneable {
     private final Chess.PieceColor color;
 
     /**
@@ -56,5 +56,12 @@ public class Piece {
      */
     public String toString(){
         return "Piece of " + this.getColor() + " color";
+    }
+
+    /**
+     * Returns a clone of the Piece object.
+     */
+    public Piece clone() {
+        return new Piece(this);
     }
 }

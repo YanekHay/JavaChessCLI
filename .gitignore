@@ -26,3 +26,7 @@ replay_pid*
 # Intellij files
 .idea
 *.iml
+
+# output
+out/
+

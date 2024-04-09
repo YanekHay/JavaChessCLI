@@ -38,6 +38,21 @@ public class Rook extends Piece {
         super(color);
         this.hasMoved = hasMoved;
     }
+    /**
+     * Returns the move status of the rook piece.
+     *
+     * @return the move status of the rook piece
+     */
+    public boolean getHasMoved() {
+        return this.hasMoved;
+    }
+
+    /**
+     * Sets the move status of the rook piece.
+     */
+    public void move() {
+        this.hasMoved = true;
+    }
 
     /**
      * Returns a string representation of the rook piece.
@@ -47,7 +62,13 @@ public class Rook extends Piece {
      */
     public String toString() {
         if (this.getColor() == Chess.PieceColor.WHITE)
-            return "R";
+            if (this.hasMoved)
+                return "S";
+            else
+                return "R";
+        else
+        if (this.hasMoved)
+            return "s";
         else
             return "r";
     }

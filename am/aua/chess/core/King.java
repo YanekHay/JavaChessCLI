@@ -36,6 +36,21 @@ public class King extends Piece {
     }
 
     /**
+     * Returns the hasMoved value of the King.
+     *
+     * @return The hasMoved value of the King.
+     */
+    public boolean getHasMoved() {
+        return this.hasMoved;
+    }
+
+    /**
+     * Sets the hasMoved value of the King.
+     */
+    public void move() {
+        this.hasMoved = true;
+    }
+    /**
      * Returns a string representation of the King.
      * If the King's color is WHITE, returns "K". Otherwise, returns "k".
      *
@@ -43,7 +58,13 @@ public class King extends Piece {
      */
     public String toString() {
         if (this.getColor() == Chess.PieceColor.WHITE)
-            return "K";
+            if (this.hasMoved)
+                return "L";
+            else
+                return "K";
+        else
+        if (this.hasMoved)
+            return "l";
         else
             return "k";
     }

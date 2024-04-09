@@ -2,6 +2,8 @@ package am.aua.chess.core;
 import am.aua.chess.utils.ArrayTools;
 import am.aua.chess.utils.WrongPositioningException;
 
+import java.lang.reflect.Array;
+
 /**
  * The Chess class represents a chess game.
  * It contains methods to initialize the chess board, perform moves, and check game status.
@@ -96,7 +98,6 @@ public class Chess {
                         board[i][j] = new Rook(PieceColor.BLACK, true);
                         break;
                     case 'B':
-                        System.out.println("WHITE BISHOP INITIALIZED");
                         board[i][j] = new Bishop(PieceColor.WHITE);
                         break;
                     case 'b':
@@ -168,7 +169,7 @@ public class Chess {
      * @return The 2D array representing the chess board.
      */
     public Piece[][] getBoard() {
-        return board;
+        return (board);
     }
 
     /**
@@ -253,21 +254,97 @@ public class Chess {
             System.out.println("It is not your turn!!!");
             return false;
         }
-        if (ArrayTools.contains(this.reachableFrom(origin), destination)){
 
+        // A backup is created first. If the king is exposed to a threat after a potential move,
+        // the backup is restored. Hence, the following copy needs to be a deep copy.
+        Piece[][] boardCopy = this.getBoard();
+
+        if (ArrayTools.contains(this.reachableFrom(origin), destination)){
             // TODO: The case for castling is not handled yet.
             // TODO: The case for en passant is not handled yet.
             // TODO: The case for open check is not handled yet.
             this.setPieceAt(destination, this.getPieceAt(origin));
             this.setPieceAt(origin, null);
-            this.moveCount++;
             if (this.getPieceAt(destination) instanceof Pawn){
                 ((Pawn) this.getPieceAt(destination)).move();
             }
+            if (this.getPieceAt(destination) instanceof Rook){
+                ((Rook) this.getPieceAt(destination)).move();
+            }
+            if (this.getPieceAt(destination) instanceof King){
+                ((King) this.getPieceAt(destination)).move();
+            }
+
+            if (isKingUnderAttack(this.getTurn())) {
+                this.board = boardCopy;
+                return false;
+            }
+            this.moveCount++;
             return true;
         }
         else{
             return false;
         }
+    }
+
+    /**
+     * Determines whether the king of the given color is in check.
+     * @param kingColor The color of the king in question.
+     * @return True, if the king in question is under attack by the opponent.
+     */
+    public boolean isKingUnderAttack(PieceColor kingColor) {
+        Position kingPosition = null;
+        PieceColor opponentColor;
+        Position[] p = null;
+
+        //find the king
+        for (int i = 0; i < BOARD_RANKS; i++)
+            for (int j = 0; j < BOARD_FILES; j++)
+                if (board[i][j] != null
+                        && board[i][j].getColor() == kingColor
+                        && board[i][j] instanceof King)
+                    kingPosition = Position.generateFromRankAndFile(i, j);
+
+        //determine the opposite color
+        if (kingColor == PieceColor.WHITE)
+            opponentColor = PieceColor.BLACK;
+        else
+            opponentColor = PieceColor.WHITE;
+
+        p = getAllDestinationsByColor(opponentColor);
+
+        for (int i = 0; i < p.length; i++)
+            if (p[i].equals(kingPosition))
+                return true;
+
+        return false;
+    }
+
+    /**
+     * A method that accumulates every square that can be reached by every piece of the given
+     * color.
+     *
+     * @param color
+     * @return An array with all reachable squares by all pieces of a color
+     */
+    public Position[] getAllDestinationsByColor(PieceColor color) {
+        Position[] result = new Position[0];
+
+        for (int i = 0; i < BOARD_RANKS; i++)
+            for (int j = 0; j < BOARD_FILES; j++)
+                if (board[i][j] != null && board[i][j].getColor() == color) {
+                    Position[] current = board[i][j].allDestinations(this,
+                            Position.generateFromRankAndFile(i, j));
+
+                    duplicates:
+                    for (int k = 0; k < current.length; k++) {
+                        for (int l = 0; l < result.length; l++)
+                            if (current[k].equals(result[l]))
+                                continue duplicates;
+                        result = Position.appendPositionsToArray(result, current);
+                    }
+                }
+
+        return result;
     }
 }
