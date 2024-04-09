@@ -152,14 +152,17 @@ public class Position {
     }
 
     /**
-     * Checks if this Position object is equal to the specified Position object.
-     * Two Position objects are considered equal if their rank and file values are equal.
+     * Checks if a Position object is equal to another object.
      *
-     * @param p the Position object to compare with
-     * @return true if the Position objects are equal, false otherwise
+     * @param o the object to compare to
+     * @return true if the Position object is equal to the other object, false otherwise
      */
-    public boolean equals(Position p) {
-        return (this.rank == p.getRank()) && (this.file == p.getFile());
+    public boolean equals(Object o) {
+        if (o instanceof Position) {
+            Position p = (Position) o;
+            return (this.rank == p.getRank()) && (this.file == p.getFile());
+        }
+        return false;
     }
 
 }

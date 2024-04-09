@@ -20,7 +20,7 @@ public class ArrayTools {
                 if (array[i][j] == null)
                     copy[i][j] = null;
                 else
-                    copy[i][j] = new Piece(array[i][j]);
+                    copy[i][j] = array[i][j].clone();
             }
         }
         return copy;

@@ -1,8 +1,7 @@
 package am.aua.chess.core;
 import am.aua.chess.utils.ArrayTools;
-import am.aua.chess.utils.WrongPositioningException;
-
-import java.lang.reflect.Array;
+import am.aua.chess.utils.IllegalArrangementException;
+import am.aua.chess.utils.InvalidNumberOfKingsException;
 
 /**
  * The Chess class represents a chess game.
@@ -31,7 +30,7 @@ public class Chess {
      * Constructs a new instance of the Chess class.
      * Initializes the move count to 0 and calls the initializeBoard method.
      */
-    public Chess() {
+    public Chess() throws IllegalArrangementException {
         moveCount = 0;
         this.fillBoardFromString("RNBQKBNRPPPPPPPP                                pppppppprnbqkbnr");
     }
@@ -50,7 +49,7 @@ public class Chess {
      * @param positioning
      * @param turn
      */
-    public Chess(String positioning, PieceColor turn) {
+    public Chess(String positioning, PieceColor turn) throws IllegalArrangementException{
         this.fillBoardFromString(positioning);
         this.moveCount = turn==PieceColor.WHITE ? 0 : 1;
     }
@@ -59,14 +58,8 @@ public class Chess {
      * Initializes the chess board with the given positioning.
      * @param positioning
      */
-    private void fillBoardFromString(String positioning) {
-        //TODO: Move the exception handling to main
-        try {
-            this.checkPositioning(positioning);
-        } catch (WrongPositioningException e) {
-            System.out.println(e.getMessage());
-            System.exit(-1);
-        }
+    private void fillBoardFromString(String positioning) throws IllegalArrangementException {
+        this.verifyArrangement(positioning);
 
         board = new Piece[BOARD_RANKS][BOARD_FILES];
         for (int i = 0; i < BOARD_RANKS; i++) {
@@ -131,22 +124,22 @@ public class Chess {
 
     /**
      * Checks if the positioning string is valid.
-     * @param positioning The positioning string to check.
-     * @throws WrongPositioningException if the positioning string is invalid.
+     * @param s The positioning string to check.
+     * @throws IllegalArrangementException if the positioning string is invalid.
      */
-    private void checkPositioning(String positioning) throws WrongPositioningException {
-        if (positioning.length() != 64) {
-            throw new WrongPositioningException("The positioning string should contain 64 characters");
+    private void verifyArrangement(String s) throws IllegalArrangementException {
+        if (s.length() != 64) {
+            throw new IllegalArrangementException("The positioning string should contain 64 characters");
         }
-        if (positioning.matches("[^KkQqRrBbNnPpLlSs]")) {
-            throw new WrongPositioningException("The positioning string should contain only valid characters which are [KkQqRrBbNnPpLl]");
+        if (s.matches("[^KkQqRrBbNnPpLlSs]")) {
+            throw new IllegalArrangementException("The positioning string should contain only valid characters which are [KkQqRrBbNnPpLl]");
         }
-        int lCount = getCharCount(positioning, 'l');
-        int kCount = getCharCount(positioning, 'k');
-        int capLCount = getCharCount(positioning, 'L');
-        int capKCount = getCharCount(positioning, 'K');
+        int lCount = getCharCount(s, 'l');
+        int kCount = getCharCount(s, 'k');
+        int capLCount = getCharCount(s, 'L');
+        int capKCount = getCharCount(s, 'K');
         if (lCount + kCount + capLCount + capKCount != 2)
-            throw new WrongPositioningException("The positioning string should contain exactly 2 kings");
+            throw new InvalidNumberOfKingsException();
     }
 
     /**
@@ -250,7 +243,7 @@ public class Chess {
             System.out.println("There is no piece at the origin!!!");
             return false;
         }
-        if (this.getTurn()!=this.getPieceAt(origin).getColor()){
+        if (this.getTurn()!=this.getPieceAt(origin).getPieceColor()){
             System.out.println("It is not your turn!!!");
             return false;
         }
@@ -301,7 +294,7 @@ public class Chess {
         for (int i = 0; i < BOARD_RANKS; i++)
             for (int j = 0; j < BOARD_FILES; j++)
                 if (board[i][j] != null
-                        && board[i][j].getColor() == kingColor
+                        && board[i][j].getPieceColor() == kingColor
                         && board[i][j] instanceof King)
                     kingPosition = Position.generateFromRankAndFile(i, j);
 
@@ -332,7 +325,7 @@ public class Chess {
 
         for (int i = 0; i < BOARD_RANKS; i++)
             for (int j = 0; j < BOARD_FILES; j++)
-                if (board[i][j] != null && board[i][j].getColor() == color) {
+                if (board[i][j] != null && board[i][j].getPieceColor() == color) {
                     Position[] current = board[i][j].allDestinations(this,
                             Position.generateFromRankAndFile(i, j));
 

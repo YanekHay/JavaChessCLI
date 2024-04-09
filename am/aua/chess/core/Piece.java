@@ -4,7 +4,7 @@ package am.aua.chess.core;
  * It contains methods to get the color of the piece and all possible destinations for the piece.
  * The class is extended by specific piece classes such as Bishop, King, Knight, Pawn, Queen, and Rook.
  */
-public class Piece implements Cloneable {
+public abstract class Piece implements Cloneable {
     private final Chess.PieceColor color;
 
     /**
@@ -27,14 +27,14 @@ public class Piece implements Cloneable {
      * Constructs a new Piece object with the default color (WHITE).
      */
     public Piece(Piece that){
-        this.color = that.getColor();
+        this.color = that.getPieceColor();
     }
     /**
      * Returns the color of the piece.
      *
      * @return the color of the piece
      */
-    public Chess.PieceColor getColor() {
+    public final Chess.PieceColor getPieceColor() {
         return color;
     }
 
@@ -45,9 +45,7 @@ public class Piece implements Cloneable {
      * @param p the current position of the piece
      * @return an array of all possible destinations for the piece
      */
-    public Position[] allDestinations(Chess chess, Position p){
-        return null;
-    }
+    public abstract Position[] allDestinations(Chess chess, Position p);
 
     /**
      * Returns a string representation of the piece.
@@ -55,13 +53,18 @@ public class Piece implements Cloneable {
      * @return a string representation of the piece
      */
     public String toString(){
-        return "Piece of " + this.getColor() + " color";
+        return "Piece of " + this.getPieceColor() + " color";
     }
 
     /**
      * Returns a clone of the Piece object.
      */
     public Piece clone() {
-        return new Piece(this);
+        try {
+            return (Piece) super.clone();
+        } catch (CloneNotSupportedException e) {
+            System.out.println("Cloning not allowed.");
+            return null;
+        }
     }
 }

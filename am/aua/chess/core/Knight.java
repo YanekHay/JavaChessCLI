@@ -54,7 +54,7 @@ public class Knight extends Piece {
             if ((i >= 0) && (i < Chess.BOARD_RANKS) && (j >= 0) && (j < Chess.BOARD_FILES)) {
                 Position current = Position.generateFromRankAndFile(i, j);
                 if (chess.isEmpty(current) || (current != null &&
-                        chess.getPieceAt(current).getColor() != chess.getPieceAt(p).getColor())) {
+                        chess.getPieceAt(current).getPieceColor() != chess.getPieceAt(p).getPieceColor())) {
                     positions = Position.appendPositionsToArray(positions, current);
                 }
             }
@@ -68,6 +68,13 @@ public class Knight extends Piece {
      * @return The string representation of the knight.
      */
     public String toString() {
-        return this.getColor()==Chess.PieceColor.WHITE ? "N" : "n";
+        return this.getPieceColor()==Chess.PieceColor.WHITE ? "N" : "n";
+    }
+
+    /**
+     * Returns a clone of the Knight object.
+     */
+    public Knight clone() {
+        return (Knight) super.clone();
     }
 }

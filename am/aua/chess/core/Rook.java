@@ -61,7 +61,7 @@ public class Rook extends Piece {
      * @return a string representation of the rook piece
      */
     public String toString() {
-        if (this.getColor() == Chess.PieceColor.WHITE)
+        if (this.getPieceColor() == Chess.PieceColor.WHITE)
             if (this.hasMoved)
                 return "S";
             else
@@ -107,7 +107,7 @@ public class Rook extends Piece {
                     result = Position.appendPositionsToArray(result, current);
                 else {
                     assert current != null;
-                    if (chess.getPieceAt(current).getColor() != chess.getPieceAt(p).getColor())
+                    if (chess.getPieceAt(current).getPieceColor() != chess.getPieceAt(p).getPieceColor())
                         result = Position.appendPositionsToArray(result, current);
                     break;
                 }
@@ -117,5 +117,14 @@ public class Rook extends Piece {
         }
 
         return result;
+    }
+
+    /**
+     * Returns a clone of the Rook object.
+     */
+    public Rook clone() {
+        Rook r = (Rook) super.clone();
+        r.hasMoved = this.hasMoved;
+        return r;
     }
 }

@@ -52,7 +52,7 @@ public class Pawn extends Piece{
      * @return "P" for white pawn, "p" for black pawn.
      */
     public String toString(){
-        if(this.getColor() == Chess.PieceColor.WHITE)
+        if(this.getPieceColor() == Chess.PieceColor.WHITE)
             return "P";
         else
             return "p";
@@ -68,7 +68,7 @@ public class Pawn extends Piece{
         Position[] result = new Position[0];
         int rank = p.getRank();
         int file = p.getFile();
-        int direction = this.getColor() == Chess.PieceColor.WHITE ? 1 : -1;
+        int direction = this.getPieceColor() == Chess.PieceColor.WHITE ? 1 : -1;
         Position forward = Position.generateFromRankAndFile(rank + direction, file);
         Position doubleForward = Position.generateFromRankAndFile(rank + 2 * direction, file);
         Position leftDiagonal = Position.generateFromRankAndFile(rank + direction, file - 1);
@@ -103,6 +103,15 @@ public class Pawn extends Piece{
      * @return true if the position is available for attack, false otherwise.
      */
     private boolean isAttackPositionAvailable(Chess chess, Position p){
-        return !chess.isEmpty(p) && (this.getColor() != chess.getPieceAt(p).getColor());
+        return !chess.isEmpty(p) && (this.getPieceColor() != chess.getPieceAt(p).getPieceColor());
+    }
+
+    /**
+     * Returns a clone of the Pawn object.
+     */
+    public Pawn clone(){
+        Pawn p = (Pawn) super.clone();
+        p.hasMoved = this.hasMoved;
+        return p;
     }
 }

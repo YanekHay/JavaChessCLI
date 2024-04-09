@@ -52,7 +52,7 @@ public class Queen extends Piece {
                     result = Position.appendPositionsToArray(result, current);
                 else {
                     assert current != null;
-                    if (chess.getPieceAt(current).getColor() != chess.getPieceAt(p).getColor())
+                    if (chess.getPieceAt(current).getPieceColor() != chess.getPieceAt(p).getPieceColor())
                         result = Position.appendPositionsToArray(result, current);
                     break;
                 }
@@ -71,6 +71,13 @@ public class Queen extends Piece {
      * @return a string representation of the Queen piece
      */
     public String toString() {
-        return this.getColor() == Chess.PieceColor.WHITE ? "Q" : "q";
+        return this.getPieceColor() == Chess.PieceColor.WHITE ? "Q" : "q";
+    }
+
+    /**
+     * Returns a clone of the Queen object.
+     */
+    public Queen clone() {
+        return (Queen) super.clone();
     }
 }

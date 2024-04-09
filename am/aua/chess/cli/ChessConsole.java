@@ -2,6 +2,8 @@ package am.aua.chess.cli;
 
 import am.aua.chess.core.*;
 import am.aua.chess.utils.ArrayTools;
+import am.aua.chess.utils.IllegalArrangementException;
+
 import java.util.Scanner;
 
 /**
@@ -19,7 +21,7 @@ public class ChessConsole {
     /**
      * Constructs a new ChessConsole object.
      */
-    public ChessConsole() {
+    public ChessConsole() throws IllegalArrangementException {
         game = new Chess();
     }
 
@@ -29,7 +31,7 @@ public class ChessConsole {
      * @param turn The turn to start the game with.
      * @Note: The positioning string is a string of 64 characters representing the board from the top-left corner to the bottom-right corner.
      */
-    public ChessConsole(String positioning, Chess.PieceColor turn){
+    public ChessConsole(String positioning, Chess.PieceColor turn) throws IllegalArrangementException {
         game = new Chess(positioning, turn);
     }
     /**
@@ -177,7 +179,7 @@ public class ChessConsole {
                 }
 
                 assert p1 != null;
-                if (game.getPieceAt(p1).getColor() != game.getTurn()) {
+                if (game.getPieceAt(p1).getPieceColor() != game.getTurn()) {
                     System.out.println("That piece belongs to the opponent.");
                     continue;
                 }
@@ -187,7 +189,7 @@ public class ChessConsole {
                 p2 = Position.generateFromString(input[1]);
 
                 assert p2 != null;
-                if (game.getPieceAt(p2).getColor() != game.getTurn()) {
+                if (game.getPieceAt(p2).getPieceColor() != game.getTurn()) {
                     System.out.println("That piece belongs to the opponent.");
                     continue;
                 }

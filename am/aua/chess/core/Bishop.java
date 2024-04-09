@@ -28,7 +28,7 @@ public class Bishop extends Piece {
      * @return The string representation of the bishop.
      */
     public String toString() {
-        if (this.getColor() == Chess.PieceColor.WHITE)
+        if (this.getPieceColor() == Chess.PieceColor.WHITE)
             return "B";
         else
             return "b";
@@ -67,7 +67,7 @@ public class Bishop extends Piece {
                     result = Position.appendPositionsToArray(result, current);
                 else {
                     assert current != null;
-                    if (chess.getPieceAt(current).getColor() != chess.getPieceAt(p).getColor())
+                    if (chess.getPieceAt(current).getPieceColor() != chess.getPieceAt(p).getPieceColor())
                         result = Position.appendPositionsToArray(result, current);
 
                     break;
@@ -78,5 +78,12 @@ public class Bishop extends Piece {
         }
 
         return result;
+    }
+
+    /**
+     * Returns a clone of the Bishop object.
+     */
+    public Bishop clone() {
+        return (Bishop) super.clone();
     }
 }

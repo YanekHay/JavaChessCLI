@@ -50,6 +50,7 @@ public class King extends Piece {
     public void move() {
         this.hasMoved = true;
     }
+
     /**
      * Returns a string representation of the King.
      * If the King's color is WHITE, returns "K". Otherwise, returns "k".
@@ -57,13 +58,12 @@ public class King extends Piece {
      * @return The string representation of the King.
      */
     public String toString() {
-        if (this.getColor() == Chess.PieceColor.WHITE)
+        if (this.getPieceColor() == Chess.PieceColor.WHITE)
             if (this.hasMoved)
                 return "L";
             else
                 return "K";
-        else
-        if (this.hasMoved)
+        else if (this.hasMoved)
             return "l";
         else
             return "k";
@@ -104,12 +104,21 @@ public class King extends Piece {
                     result = Position.appendPositionsToArray(result, current);
                 else {
                     assert current != null;
-                    if (chess.getPieceAt(current).getColor() != chess.getPieceAt(p).getColor())
+                    if (chess.getPieceAt(current).getPieceColor() != chess.getPieceAt(p).getPieceColor())
                         result = Position.appendPositionsToArray(result, current);
                 }
             }
         }
 
         return result;
+    }
+
+    /**
+     * Returns a clone of the King object.
+     */
+    public King clone() {
+        King k = (King) super.clone();
+        k.hasMoved = this.hasMoved;
+        return k;
     }
 }
