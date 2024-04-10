@@ -123,7 +123,6 @@ public class Position {
      */
     public static Position generateFromRankAndFile(int rank, int file) {
         if ((rank < 0) || (rank > Chess.BOARD_RANKS)) {
-            System.out.println(rank);
             System.out.println("Rank must be in range from 0 to " + (Chess.BOARD_RANKS-1));
             return null;
         }

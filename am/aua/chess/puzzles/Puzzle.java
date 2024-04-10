@@ -16,6 +16,7 @@ public final class Puzzle implements Comparable<Puzzle>{
     private String description;
 
     public Puzzle(String arrangement, String description) throws MalformedPuzzleException{
+        System.out.println("ARG  " + arrangement);
         this.parsePuzzleDetails(arrangement);
         this.description = description;
     }

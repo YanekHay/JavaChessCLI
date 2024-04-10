@@ -203,6 +203,7 @@ public class ChessConsole {
                         continue;
                     }
                     Move m = new Move(p1, p2);
+                    System.out.println("MOVE " + m.toString());
                     boolean success = game.performMove(m);
                     if (!success){
                         System.out.println("Invalid move. Please try again.");

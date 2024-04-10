@@ -22,10 +22,9 @@ public class Main {
    public static void main(String[] args) {
       try {
 //      ChessConsole chess = new ChessConsole("             pk                  b          PPPPK               ", Chess.PieceColor.WHITE);
-//         BufferedReader inputStream = new BufferedReader(new FileReader("am/aua/chess/puzzles/puzzle1.txt"));
-//         Puzzle puzzle = new Puzzle(inputStream.readLine(), inputStream.readLine());
-//         ChessConsole chess = new ChessConsole(puzzle.getArrangement(), puzzle.getTurn());
-         ChessConsole chess = new ChessConsole("rs---------npp-pp--p--pln-pP------p-PP---PS-N---P---BP-P-----S-L", Chess.PieceColor.WHITE);
+         BufferedReader inputStream = new BufferedReader(new FileReader("am/aua/chess/puzzles/puzzle1.txt"));
+         Puzzle puzzle = new Puzzle(inputStream.readLine(), inputStream.readLine());
+         ChessConsole chess = new ChessConsole(puzzle.getArrangement(), puzzle.getTurn());
          chess.play();
       } catch (Exception e) {
          e.printStackTrace();
