@@ -97,6 +97,7 @@ public class King extends Piece {
         for (int d = 0; d < rankOffsets.length; d++) {
             int i = p.getRank() + rankOffsets[d];
             int j = p.getFile() + fileOffsets[d];
+            System.out.println("i: " + i + " j: " + j);
             if (i >= 0 && i < Chess.BOARD_RANKS &&
                     j >= 0 && j < Chess.BOARD_FILES) {
                 Position current = Position.generateFromRankAndFile(i, j);

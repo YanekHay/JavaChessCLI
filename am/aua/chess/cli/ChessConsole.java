@@ -16,7 +16,7 @@ public class ChessConsole {
      * @return The Chess object representing the game.
      */
     public Chess getGame() {
-        return new Chess(game);
+        return game.clone();
     }
     /**
      * Constructs a new ChessConsole object.
@@ -26,13 +26,13 @@ public class ChessConsole {
     }
 
     /**
-     * Constructs a new ChessConsole object with the given positioning and turn.
-     * @param positioning The positioning string to start the game with.
+     * Constructs a new ChessConsole object with the given arrangement and turn.
+     * @param arrangement The arrangement string to start the game with.
      * @param turn The turn to start the game with.
-     * @Note: The positioning string is a string of 64 characters representing the board from the top-left corner to the bottom-right corner.
+     * @Note: The arrangement string is a string of 64 characters representing the board from the top-left corner to the bottom-right corner.
      */
-    public ChessConsole(String positioning, Chess.PieceColor turn) throws IllegalArrangementException {
-        game = new Chess(positioning, turn);
+    public ChessConsole(String arrangement, Chess.PieceColor turn) throws IllegalArrangementException {
+        game = new Chess(arrangement, turn);
     }
     /**
      * Prints the current state of the chess board.
@@ -165,12 +165,11 @@ public class ChessConsole {
             String[] input = inputLine.split(" ");
             Position p1 = null, p2 = null;
 
-            if (input.length == 1){
+            if (input.length >= 1){
                 if (input[0].equals("resign")) {
                     System.out.println(game.getTurn() + " has resigned.");
                     return;
                 }
-                p1 = Position.generateFromString(input[0]);
 
                 if (input[0].equals("debug")) {
                     debug();
@@ -178,28 +177,38 @@ public class ChessConsole {
                     continue;
                 }
 
-                assert p1 != null;
-                if (game.getPieceAt(p1).getPieceColor() != game.getTurn()) {
-                    System.out.println("That piece belongs to the opponent.");
+                p1 = Position.generateFromString(input[0]);
+
+                if (p1 == null || game.getPieceAt(p1) == null) {
+                    System.out.println("Invalid position. Please try again.");
                     continue;
                 }
-                print(p1, game.reachableFrom(Position.generateFromString(input[0])));
-            }
-            else if (input.length == 2){
-                p2 = Position.generateFromString(input[1]);
-
-                assert p2 != null;
-                if (game.getPieceAt(p2).getPieceColor() != game.getTurn()) {
-                    System.out.println("That piece belongs to the opponent.");
-                    continue;
+                if (input.length == 1) {
+                    // Players are informed about wrong turns, but the squares for
+                    // the opponent's piece are still highlighted
+                    if (game.getPieceAt(p1).getPieceColor() != game.getTurn())
+                        System.out.println("That piece belongs to the opponent.");
+                    print(p1, game.reachableFrom(Position.generateFromString(input[0])));
                 }
-                Move m = new Move(p1, p2);
+                else if (input.length == 2){
+                    if (game.getPieceAt(p1).getPieceColor() != game.getTurn()) {
+                        System.out.println("That piece belongs to the opponent.");
+                        continue;
+                    }
 
-                boolean success = game.performMove(m);
-                if (!success){
-                    System.out.println("Invalid move. Please try again.");
+                    p2 = Position.generateFromString(input[1]);
+
+                    if ((game.getPieceAt(p2)!=null) && (game.getPieceAt(p2).getPieceColor() != game.getTurn())) {
+                        System.out.println("That piece belongs to the opponent.");
+                        continue;
+                    }
+                    Move m = new Move(p1, p2);
+                    boolean success = game.performMove(m);
+                    if (!success){
+                        System.out.println("Invalid move. Please try again.");
+                    }
+                    print();
                 }
-                print();
             }
         }
     }

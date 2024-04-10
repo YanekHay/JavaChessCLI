@@ -10,7 +10,7 @@ import am.aua.chess.utils.InvalidNumberOfKingsException;
  * Each chess piece is represented by a specific character.
  * The class also keeps track of the move count and the turn of the player.
  */
-public class Chess {
+public class Chess implements Cloneable{
     /**
      * The PieceColor enum represents the color of a chess piece.
      */
@@ -45,74 +45,80 @@ public class Chess {
 
 
     /**
-     * Constructs a new instance of the Chess class with the given positioning and turn.
-     * @param positioning
-     * @param turn
+     * Constructs a new instance of the Chess class with the given arrangement and turn.
+     * @param arrangement The string representing the arrangements of the chess pieces.
+     * @param turn The color of the player to move.
      */
-    public Chess(String positioning, PieceColor turn) throws IllegalArrangementException{
-        this.fillBoardFromString(positioning);
+    public Chess(String arrangement, PieceColor turn) throws IllegalArrangementException{
+        this.fillBoardFromString(arrangement);
         this.moveCount = turn==PieceColor.WHITE ? 0 : 1;
     }
 
     /**
-     * Initializes the chess board with the given positioning.
-     * @param positioning
+     * Initializes the chess board with the given arrangements.
+     * @param arrangements The string representing the arrangements of the chess pieces.
      */
-    private void fillBoardFromString(String positioning) throws IllegalArrangementException {
-        this.verifyArrangement(positioning);
+    private void fillBoardFromString(String arrangements) throws IllegalArrangementException {
+        this.verifyArrangement(arrangements);
 
         board = new Piece[BOARD_RANKS][BOARD_FILES];
         for (int i = 0; i < BOARD_RANKS; i++) {
             for (int j = 0; j < BOARD_FILES; j++) {
-                char piece = positioning.charAt(i * BOARD_FILES + j);
+                char piece = arrangements.charAt(i * BOARD_FILES + j);
+                Position p = Position.generateFromRankAndFile(i, j);
+                if (p==null) throw new IllegalArrangementException("Invalid position");
                 switch (piece) {
                     case 'K':
-                        board[i][j] = new King(PieceColor.WHITE);
+                        this.setPieceAt(p, new King(PieceColor.WHITE));
                         break;
                     case 'k':
-                        board[i][j] = new King(PieceColor.BLACK);
+                        this.setPieceAt(p, new King(PieceColor.BLACK));
                         break;
                     case 'Q':
-                        board[i][j] = new Queen(PieceColor.WHITE);
+                        this.setPieceAt(p, new Queen(PieceColor.WHITE));
                         break;
                     case 'q':
-                        board[i][j] = new Queen(PieceColor.BLACK);
+                        this.setPieceAt(p, new Queen(PieceColor.BLACK));
                         break;
                     case 'R':
-                        board[i][j] = new Rook(PieceColor.WHITE);
+                        this.setPieceAt(p, new Rook(PieceColor.WHITE));
                         break;
                     case 'r':
-                        board[i][j] = new Rook(PieceColor.BLACK);
+                        this.setPieceAt(p, new Rook(PieceColor.BLACK));
                         break;
                     case 'S':
-                        board[i][j] = new Rook(PieceColor.WHITE, true);
+                        this.setPieceAt(p, new Rook(PieceColor.WHITE, true));
                         break;
                     case 's':
-                        board[i][j] = new Rook(PieceColor.BLACK, true);
+                        this.setPieceAt(p, new Rook(PieceColor.BLACK, true));
                         break;
                     case 'B':
-                        board[i][j] = new Bishop(PieceColor.WHITE);
+                        this.setPieceAt(p, new Bishop(PieceColor.WHITE));
                         break;
                     case 'b':
-                        board[i][j] = new Bishop(PieceColor.BLACK);
+                        this.setPieceAt(p, new Bishop(PieceColor.BLACK));
                         break;
                     case 'N':
-                        board[i][j] = new Knight(PieceColor.WHITE);
+                        this.setPieceAt(p, new Knight(PieceColor.WHITE));
                         break;
                     case 'n':
-                        board[i][j] = new Knight(PieceColor.BLACK);
+                        this.setPieceAt(p, new Knight(PieceColor.BLACK));
                         break;
                     case 'P':
-                        board[i][j] = new Pawn(PieceColor.WHITE);
+                        Pawn pawnW = new Pawn(PieceColor.WHITE);
+                        if (p.getRank() != 1) pawnW.move();
+                        this.setPieceAt(p, pawnW);
                         break;
                     case 'p':
-                        board[i][j] = new Pawn(PieceColor.BLACK);
+                        Pawn pawnB = new Pawn(PieceColor.BLACK);
+                        if (p.getRank() != 1) pawnB.move();
+                        this.setPieceAt(p, pawnB);
                         break;
                     case 'L':
-                        board[i][j] = new King(PieceColor.WHITE, true);
+                        this.setPieceAt(p, new King(PieceColor.WHITE, true));
                         break;
                     case 'l':
-                        board[i][j] = new King(PieceColor.BLACK, true);
+                        this.setPieceAt(p, new King(PieceColor.BLACK, true));
                         break;
                     default:
                         board[i][j] = null;
@@ -123,16 +129,16 @@ public class Chess {
     }
 
     /**
-     * Checks if the positioning string is valid.
-     * @param s The positioning string to check.
-     * @throws IllegalArrangementException if the positioning string is invalid.
+     * Checks if the arrangement string is valid.
+     * @param s The arrangement string to check.
+     * @throws IllegalArrangementException if the arrangement string is invalid.
      */
     private void verifyArrangement(String s) throws IllegalArrangementException {
         if (s.length() != 64) {
-            throw new IllegalArrangementException("The positioning string should contain 64 characters");
+            throw new IllegalArrangementException("The arrangement string should contain 64 characters");
         }
         if (s.matches("[^KkQqRrBbNnPpLlSs]")) {
-            throw new IllegalArrangementException("The positioning string should contain only valid characters which are [KkQqRrBbNnPpLl]");
+            throw new IllegalArrangementException("The arrangement string should contain only valid characters which are [KkQqRrBbNnPpLl]");
         }
         int lCount = getCharCount(s, 'l');
         int kCount = getCharCount(s, 'k');
@@ -162,7 +168,7 @@ public class Chess {
      * @return The 2D array representing the chess board.
      */
     public Piece[][] getBoard() {
-        return (board);
+        return ArrayTools.deepCopy(board);
     }
 
     /**
@@ -339,5 +345,19 @@ public class Chess {
                 }
 
         return result;
+    }
+
+    /**
+     * Returns a clone of the Chess object.
+     */
+    public Chess clone() {
+        try{
+            Chess c = (Chess) super.clone();
+            c.board = ArrayTools.deepCopy(this.board);
+            c.moveCount = this.getMoveCount();
+            return c;
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
     }
 }

@@ -122,11 +122,12 @@ public class Position {
      * @return a Position object generated from the rank and file numbers
      */
     public static Position generateFromRankAndFile(int rank, int file) {
-        if ((rank < 0) || (rank >= Chess.BOARD_RANKS)) {
+        if ((rank < 0) || (rank > Chess.BOARD_RANKS)) {
+            System.out.println(rank);
             System.out.println("Rank must be in range from 0 to " + (Chess.BOARD_RANKS-1));
             return null;
         }
-        if ((file < 0) || (file >= Chess.BOARD_FILES)) {
+        if ((file < 0) || (file > Chess.BOARD_FILES)) {
             System.out.println("File must be in range from 0 to " + (Chess.BOARD_FILES-1));
             return null;
         }
