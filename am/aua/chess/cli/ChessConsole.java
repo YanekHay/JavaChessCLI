@@ -20,6 +20,7 @@ public class ChessConsole {
     }
     /**
      * Constructs a new ChessConsole object.
+     * @throws IllegalArrangementException If the arrangement is invalid.
      */
     public ChessConsole() throws IllegalArrangementException {
         game = new Chess();
@@ -29,7 +30,8 @@ public class ChessConsole {
      * Constructs a new ChessConsole object with the given arrangement and turn.
      * @param arrangement The arrangement string to start the game with.
      * @param turn The turn to start the game with.
-     * @Note: The arrangement string is a string of 64 characters representing the board from the top-left corner to the bottom-right corner.
+     * @throws IllegalArrangementException If the arrangement is invalid.
+     * @implNote: The arrangement string is a string of 64 characters representing the board from the top-left corner to the bottom-right corner.
      */
     public ChessConsole(String arrangement, Chess.PieceColor turn) throws IllegalArrangementException {
         game = new Chess(arrangement, turn);
@@ -63,6 +65,7 @@ public class ChessConsole {
 
     /**
      * Prints the current state of the chess board with multiple highlighted positions.
+     * @param selectedPosition The position to highlight with yellow.
      * @param availablePositions The positions to highlight.
      */
     public void print(Position selectedPosition, Position[] availablePositions){
@@ -214,6 +217,9 @@ public class ChessConsole {
         }
     }
 
+    /**
+     * Helps for debugging purposes.
+     */
     public void debug() {
         System.out.println("This method is for testing purposes.");
         //System.out.println(game.getAllDestinationsByColor(Chess.PieceColor.WHITE).length);

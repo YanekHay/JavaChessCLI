@@ -3,33 +3,72 @@ package am.aua.chess.puzzles;
 import am.aua.chess.core.Chess;
 import am.aua.chess.utils.MalformedPuzzleException;
 
+/**
+ * Represents a chess puzzle.
+ */
 public final class Puzzle implements Comparable<Puzzle>{
 
-
-
+    /**
+     * Represents the difficulty level of the puzzle.
+     */
     public enum Difficulty {
         EASY, MEDIUM, HARD, UNSPECIFIED
     }
+
     private Difficulty difficulty;
     private Chess.PieceColor turn;
     private String arrangement;
     private String description;
 
+    /**
+     * Constructs a new Puzzle object with the given arrangement and description.
+     * 
+     * @param arrangement the chess board arrangement as a string of 64 characters
+     * @param description the description of the puzzle
+     * @throws MalformedPuzzleException if the puzzle arrangement is malformed
+     */
     public Puzzle(String arrangement, String description) throws MalformedPuzzleException{
         System.out.println("ARG  " + arrangement);
         this.parsePuzzleDetails(arrangement);
         this.description = description;
     }
 
+    /**
+     * Gets the chess board arrangement of the puzzle.
+     * 
+     * @return the chess board arrangement
+     */
     public String getArrangement() {
         return arrangement;
     }
+
+    /**
+     * Gets the description of the puzzle.
+     * 
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+    
+    /**
+     * Gets the turn color of the puzzle.
+     * 
+     * @return the turn color
+     */
     public Chess.PieceColor getTurn() {
         return turn;
     }
+
+    /**
+     * Gets the difficulty level of the puzzle.
+     * 
+     * @return the difficulty level
+     */
     public Difficulty getDifficulty() {
         return difficulty;
     }
+
     private void parsePuzzleDetails(String boardDetails) throws MalformedPuzzleException {
         String[] splittedDetails = boardDetails.split(",");
         if (splittedDetails.length != 3) {
@@ -68,6 +107,14 @@ public final class Puzzle implements Comparable<Puzzle>{
         }
 
     }
+
+    /**
+     * Compares this puzzle with the specified puzzle for order.
+     * 
+     * @param that the puzzle to be compared
+     * @return a negative integer, zero, or a positive integer as this puzzle is less than, equal to, or greater than the specified puzzle
+     * @throws NullPointerException if the specified puzzle is null
+     */
     public int compareTo(Puzzle that) {
         if (that == null)
             throw new NullPointerException();
@@ -89,6 +136,12 @@ public final class Puzzle implements Comparable<Puzzle>{
         }
     }
 
+    /**
+     * Checks if this puzzle is equal to the specified object.
+     * 
+     * @param that the object to compare
+     * @return true if the specified object is equal to this puzzle, false otherwise
+     */
     public boolean equals(Object that){
         if (that instanceof Puzzle){
             Puzzle thatPuzzle = (Puzzle) that;

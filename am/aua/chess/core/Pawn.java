@@ -1,5 +1,8 @@
 package am.aua.chess.core;
 
+/**
+ * The Pawn class represents a pawn chess piece.
+ */
 public class Pawn extends Piece{
     private boolean hasMoved;
 

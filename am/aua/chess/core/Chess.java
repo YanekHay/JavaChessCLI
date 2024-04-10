@@ -13,9 +13,17 @@ import am.aua.chess.utils.InvalidNumberOfKingsException;
 public class Chess implements Cloneable{
     /**
      * The PieceColor enum represents the color of a chess piece.
+     * The color can be either WHITE or BLACK.
      */
     public static enum PieceColor {
-        WHITE, BLACK
+        /**
+         * The WHITE color.
+         */
+        WHITE,
+        /**
+         * The BLACK color.
+         */
+        BLACK
     }
 
     private Piece[][] board;
@@ -29,6 +37,7 @@ public class Chess implements Cloneable{
     /**
      * Constructs a new instance of the Chess class.
      * Initializes the move count to 0 and calls the initializeBoard method.
+     * @throws IllegalArrangementException If the arrangement is invalid.
      */
     public Chess() throws IllegalArrangementException {
         moveCount = 0;
@@ -37,6 +46,7 @@ public class Chess implements Cloneable{
 
     /**
      * Copy constructor for the Chess class.
+     * @param chess The Chess object to copy.
      */
     public Chess(Chess chess){
         this.board = chess.getBoard();
@@ -48,6 +58,7 @@ public class Chess implements Cloneable{
      * Constructs a new instance of the Chess class with the given arrangement and turn.
      * @param arrangement The string representing the arrangements of the chess pieces.
      * @param turn The color of the player to move.
+     * @throws IllegalArrangementException If the arrangement is invalid.
      */
     public Chess(String arrangement, PieceColor turn) throws IllegalArrangementException{
         this.fillBoardFromString(arrangement);
@@ -261,7 +272,6 @@ public class Chess implements Cloneable{
         if (ArrayTools.contains(this.reachableFrom(origin), destination)){
             // TODO: The case for castling is not handled yet.
             // TODO: The case for en passant is not handled yet.
-            // TODO: The case for open check is not handled yet.
             this.setPieceAt(destination, this.getPieceAt(origin));
             this.setPieceAt(origin, null);
             if (this.getPieceAt(destination) instanceof Pawn){
@@ -322,8 +332,7 @@ public class Chess implements Cloneable{
     /**
      * A method that accumulates every square that can be reached by every piece of the given
      * color.
-     *
-     * @param color
+     * @param color The color of the pieces to consider
      * @return An array with all reachable squares by all pieces of a color
      */
     public Position[] getAllDestinationsByColor(PieceColor color) {

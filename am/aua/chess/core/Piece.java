@@ -25,6 +25,7 @@ public abstract class Piece implements Cloneable {
 
     /**
      * Constructs a new Piece object with the default color (WHITE).
+     * @param that the Piece object to copy
      */
     public Piece(Piece that){
         this.color = that.getPieceColor();

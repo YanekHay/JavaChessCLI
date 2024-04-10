@@ -1,5 +1,8 @@
 package am.aua.chess.core;
 
+/**
+ * The Queen class represents a queen chess piece.
+ */
 public class Queen extends Piece {
 
     /**

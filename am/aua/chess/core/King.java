@@ -1,5 +1,8 @@
 package am.aua.chess.core;
 
+/**
+ * The King class represents a king chess piece.
+ */
 public class King extends Piece {
     private boolean hasMoved;
 

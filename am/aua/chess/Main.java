@@ -12,12 +12,9 @@ import java.util.Scanner;
  * The Main class is the entry point of the chess game.
  */
 public class Main {
-   public Main() {
-   }
-
    /**
     * The main method creates a new ChessConsole object and starts the game.
-    * @param args
+    * @param args The command line arguments.
     */
    public static void main(String[] args) {
       try {
