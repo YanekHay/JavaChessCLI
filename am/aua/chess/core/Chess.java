@@ -117,12 +117,10 @@ public class Chess implements Cloneable{
                         break;
                     case 'P':
                         Pawn pawnW = new Pawn(PieceColor.WHITE);
-                        if (p.getRank() != 1) pawnW.move();
                         this.setPieceAt(p, pawnW);
                         break;
                     case 'p':
                         Pawn pawnB = new Pawn(PieceColor.BLACK);
-                        if (p.getRank() != 1) pawnB.move();
                         this.setPieceAt(p, pawnB);
                         break;
                     case 'L':
@@ -274,13 +272,11 @@ public class Chess implements Cloneable{
             // TODO: The case for en passant is not handled yet.
             this.setPieceAt(destination, this.getPieceAt(origin));
             this.setPieceAt(origin, null);
-            if (this.getPieceAt(destination) instanceof Pawn){
-                ((Pawn) this.getPieceAt(destination)).move();
-            }
+
             if (this.getPieceAt(destination) instanceof Rook){
                 ((Rook) this.getPieceAt(destination)).move();
             }
-            if (this.getPieceAt(destination) instanceof King){
+            else if (this.getPieceAt(destination) instanceof King){
                 ((King) this.getPieceAt(destination)).move();
             }
 
