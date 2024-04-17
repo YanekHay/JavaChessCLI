@@ -28,7 +28,6 @@ public final class Puzzle implements Comparable<Puzzle>{
      * @throws MalformedPuzzleException if the puzzle arrangement is malformed
      */
     public Puzzle(String arrangement, String description) throws MalformedPuzzleException{
-        System.out.println("ARG  " + arrangement);
         this.parsePuzzleDetails(arrangement);
         this.description = description;
     }
@@ -70,6 +69,17 @@ public final class Puzzle implements Comparable<Puzzle>{
     }
 
     private void parsePuzzleDetails(String boardDetails) throws MalformedPuzzleException {
+        String[] splittedDetails = getDetails(boardDetails);
+        if (!splittedDetails[2].equalsIgnoreCase("easy") && !splittedDetails[2].equalsIgnoreCase("medium") && !splittedDetails[2].equalsIgnoreCase("hard")) {
+            throw new MalformedPuzzleException("The given Difficulty should be either Easy, Medium, Hard of UNSPECIFIED.");
+        }
+
+        this.arrangement = splittedDetails[0];
+        this.turn = Chess.PieceColor.valueOf(splittedDetails[1].toUpperCase());
+        this.difficulty = Difficulty.valueOf(splittedDetails[2].toUpperCase());
+    }
+
+    private static String[] getDetails(String boardDetails) throws MalformedPuzzleException {
         String[] splittedDetails = boardDetails.split(",");
         if (splittedDetails.length != 3) {
             throw new MalformedPuzzleException("The given Puzzle Should contain 3 parts: Arrangement(64 length), Turn, and Difficulty.");
@@ -80,13 +90,7 @@ public final class Puzzle implements Comparable<Puzzle>{
         if (!splittedDetails[1].equalsIgnoreCase("white") && !splittedDetails[1].equalsIgnoreCase("black")) {
             throw new MalformedPuzzleException("The given Turn should be either White or Black.");
         }
-        if (!splittedDetails[2].equalsIgnoreCase("easy") && !splittedDetails[2].equalsIgnoreCase("medium") && !splittedDetails[2].equalsIgnoreCase("hard")) {
-            throw new MalformedPuzzleException("The given Difficulty should be either Easy, Medium, Hard of UNSPECIFIED.");
-        }
-
-        this.arrangement = splittedDetails[0];
-        this.turn = Chess.PieceColor.valueOf(splittedDetails[1].toUpperCase());
-        this.difficulty = Difficulty.valueOf(splittedDetails[2].toUpperCase());
+        return splittedDetails;
     }
 
     private int compareDifficulties(Difficulty d1, Difficulty d2){
@@ -153,6 +157,10 @@ public final class Puzzle implements Comparable<Puzzle>{
         }
 
         return false;
+    }
+
+    public String toString(){
+        return this.arrangement + "," + this.turn + "," + this.difficulty + "\n" + this.description;
     }
 
 }

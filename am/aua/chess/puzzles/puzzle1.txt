@@ -1,2 +1,4 @@
------S-LP---BP-P-PS-N-----p-PP--rs---------npp-pp--p--pln-pP----,WHITE,MEDIUM
+--p--S-LP---BP-P-PS-N-----p-PP--rs---------npp-pp--p--pln-pP----,WHITE,MEDIUM
 1.[Event "Rated Blitz game"]
+------slp-----p----pPn-p--p--Q-------N----P--q--P----sSP----S--L,WHITE,MEDIUM
+White wins. This line is a description with no new lines.

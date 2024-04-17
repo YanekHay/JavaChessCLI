@@ -19,12 +19,11 @@ public class Main {
    public static void main(String[] args) {
       try {
 //      ChessConsole chess = new ChessConsole("             pk                  b          PPPPK               ", Chess.PieceColor.WHITE);
-         BufferedReader inputStream = new BufferedReader(new FileReader("am/aua/chess/puzzles/puzzle1.txt"));
-         Puzzle puzzle = new Puzzle(inputStream.readLine(), inputStream.readLine());
-         ChessConsole chess = new ChessConsole(puzzle.getArrangement(), puzzle.getTurn());
+
+         ChessConsole chess = new ChessConsole();
          chess.play();
       } catch (Exception e) {
-         e.printStackTrace();
+//         e.printStackTrace();
          System.out.println("An error occurred: " + e.getMessage());
          System.exit(-1);
       }
