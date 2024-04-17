@@ -3,6 +3,8 @@ import am.aua.chess.utils.ArrayTools;
 import am.aua.chess.utils.IllegalArrangementException;
 import am.aua.chess.utils.InvalidNumberOfKingsException;
 
+import java.util.ArrayList;
+
 /**
  * The Chess class represents a chess game.
  * It contains methods to initialize the chess board, perform moves, and check game status.
@@ -237,7 +239,7 @@ public class Chess implements Cloneable{
      * @param origin The origin position.
      * @return An array of positions reachable from the origin position.
      */
-    public Position[] reachableFrom(Position origin) {
+    public ArrayList<Position> reachableFrom(Position origin) {
         Piece piece = this.getPieceAt(origin);
         if (piece != null){
             return piece.allDestinations(this, origin);
@@ -267,7 +269,7 @@ public class Chess implements Cloneable{
         // the backup is restored. Hence, the following copy needs to be a deep copy.
         Piece[][] boardCopy = this.getBoard();
 
-        if (ArrayTools.contains(this.reachableFrom(origin), destination)){
+        if (this.reachableFrom(origin).contains(destination)){
             // TODO: The case for castling is not handled yet.
             // TODO: The case for en passant is not handled yet.
             this.setPieceAt(destination, this.getPieceAt(origin));
@@ -300,7 +302,7 @@ public class Chess implements Cloneable{
     public boolean isKingUnderAttack(PieceColor kingColor) {
         Position kingPosition = null;
         PieceColor opponentColor;
-        Position[] p = null;
+        ArrayList<Position> p = new ArrayList<>();
 
         //find the king
         for (int i = 0; i < BOARD_RANKS; i++)
@@ -318,8 +320,8 @@ public class Chess implements Cloneable{
 
         p = getAllDestinationsByColor(opponentColor);
 
-        for (int i = 0; i < p.length; i++)
-            if (p[i].equals(kingPosition))
+        for (int i = 0; i < p.size(); i++)
+            if (p.get(i).equals(kingPosition))
                 return true;
 
         return false;
@@ -331,21 +333,22 @@ public class Chess implements Cloneable{
      * @param color The color of the pieces to consider
      * @return An array with all reachable squares by all pieces of a color
      */
-    public Position[] getAllDestinationsByColor(PieceColor color) {
-        Position[] result = new Position[0];
+    public ArrayList<Position> getAllDestinationsByColor(PieceColor color) {
+        ArrayList<Position> result = new ArrayList<>();
 
         for (int i = 0; i < BOARD_RANKS; i++)
             for (int j = 0; j < BOARD_FILES; j++)
                 if (board[i][j] != null && board[i][j].getPieceColor() == color) {
-                    Position[] current = board[i][j].allDestinations(this,
+                    ArrayList<Position> current = board[i][j].allDestinations(this,
                             Position.generateFromRankAndFile(i, j));
 
+
                     duplicates:
-                    for (int k = 0; k < current.length; k++) {
-                        for (int l = 0; l < result.length; l++)
-                            if (current[k].equals(result[l]))
+                    for (int k = 0; k < current.size(); k++) {
+                        for (int l = 0; l < result.size(); l++)
+                            if (current.get(k).equals(result.get(l)))
                                 continue duplicates;
-                        result = Position.appendPositionsToArray(result, current);
+                        result.addAll(current);
                     }
                 }
 

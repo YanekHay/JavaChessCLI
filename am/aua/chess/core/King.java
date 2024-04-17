@@ -1,5 +1,8 @@
 package am.aua.chess.core;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  * The King class represents a king chess piece.
  */
@@ -80,7 +83,7 @@ public class King extends Piece {
      * @param p     The current position of the King.
      * @return An array of Position objects representing the reachable positions.
      */
-    public Position[] allDestinations(Chess chess, Position p) {
+    public ArrayList<Position> allDestinations(Chess chess, Position p) {
         return King.reachablePositions(chess, p);
     }
 
@@ -92,10 +95,10 @@ public class King extends Piece {
      * @param p     The current position of the King.
      * @return An array of Position objects representing the reachable positions.
      */
-    public static Position[] reachablePositions(Chess chess, Position p) {
+    public static ArrayList<Position> reachablePositions(Chess chess, Position p) {
         int[] rankOffsets = {-1, -1, 1, 1, 0, 0, -1, 1};
         int[] fileOffsets = {-1, 1, -1, 1, -1, 1, 0, 0};
-        Position[] result = new Position[0];
+        ArrayList<Position> result = new ArrayList<>();
 
         for (int d = 0; d < rankOffsets.length; d++) {
             int i = p.getRank() + rankOffsets[d];
@@ -104,11 +107,11 @@ public class King extends Piece {
                     j >= 0 && j < Chess.BOARD_FILES) {
                 Position current = Position.generateFromRankAndFile(i, j);
                 if (chess.isEmpty(current))
-                    result = Position.appendPositionsToArray(result, current);
+                    result.add(current);
                 else {
                     assert current != null;
                     if (chess.getPieceAt(current).getPieceColor() != chess.getPieceAt(p).getPieceColor())
-                        result = Position.appendPositionsToArray(result, current);
+                        result.add(current);
                 }
             }
         }

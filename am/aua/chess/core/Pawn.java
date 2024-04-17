@@ -1,5 +1,7 @@
 package am.aua.chess.core;
 
+import java.util.ArrayList;
+
 /**
  * The Pawn class represents a pawn chess piece.
  */
@@ -40,26 +42,36 @@ public class Pawn extends Piece{
      * @param p The current position of the pawn.
      * @return An array of positions representing all possible destinations for the pawn.
      */
-    public Position[] allDestinations(Chess chess, Position p){
-        Position[] result = new Position[0];
+    public ArrayList<Position> allDestinations(Chess chess, Position p){
+        ArrayList<Position> result = new ArrayList<>();
         int rank = p.getRank();
         int file = p.getFile();
         int direction = this.getPieceColor() == Chess.PieceColor.WHITE ? 1 : -1;
-        Position forward = Position.generateFromRankAndFile(rank + direction, file);
-        Position leftDiagonal = Position.generateFromRankAndFile(rank + direction, file - 1);
-        Position rightDiagonal = Position.generateFromRankAndFile(rank + direction, file + 1);
+        Position forward = null;
 
-        if (this.isPositionAvailable(chess, forward))
-            result = Position.appendPositionsToArray(result, forward);
-        if (leftDiagonal!=null && isAttackPositionAvailable(chess, leftDiagonal))
-            result = Position.appendPositionsToArray(result, leftDiagonal);
-        if (rightDiagonal!=null && isAttackPositionAvailable(chess, rightDiagonal))
-            result = Position.appendPositionsToArray(result, rightDiagonal);
+        if (rank+direction>=0 && rank+direction<Chess.BOARD_RANKS){
+            forward = Position.generateFromRankAndFile(rank + direction, file);
+            if (this.isPositionAvailable(chess, forward))
+                result.add(forward);
+
+            if (file-1>=0) {
+                Position leftDiagonal = Position.generateFromRankAndFile(rank + direction, file - 1);
+                if (isAttackPositionAvailable(chess, leftDiagonal))
+                    result.add(leftDiagonal);
+            }
+            if (file+1<Chess.BOARD_FILES) {
+                Position rightDiagonal = Position.generateFromRankAndFile(rank + direction, file + 1);
+                if (isAttackPositionAvailable(chess, rightDiagonal))
+                    result.add(rightDiagonal);
+            }
+
+        }
+
 
         if ((this.getPieceColor()== Chess.PieceColor.WHITE && p.getRank()==1) || (this.getPieceColor()== Chess.PieceColor.BLACK && p.getRank()==6)) {
             Position doubleForward = Position.generateFromRankAndFile(rank + 2 * direction, file);
-            if (doubleForward != null && this.isPositionAvailable(chess, doubleForward) && this.isPositionAvailable(chess, forward))
-                result = Position.appendPositionsToArray(result, doubleForward);
+            if (this.isPositionAvailable(chess, doubleForward) && this.isPositionAvailable(chess, forward))
+                result.add(doubleForward);
         }
         return result;
     }
@@ -71,6 +83,9 @@ public class Pawn extends Piece{
      * @return true if the position is available, false otherwise.
      */
     private boolean isPositionAvailable(Chess chess, Position p){
+        if (p==null)
+            return false;
+
         return chess.isEmpty(p);
     }
 
@@ -88,7 +103,6 @@ public class Pawn extends Piece{
      * Returns a clone of the Pawn object.
      */
     public Pawn clone(){
-        Pawn p = (Pawn) super.clone();
-        return p;
+        return (Pawn) super.clone();
     }
 }

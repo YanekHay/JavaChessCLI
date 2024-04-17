@@ -3,6 +3,9 @@ package am.aua.chess.core;
  * Rook class represents the Rook piece in the chess game.
  * It extends the Piece class and implements the allDestinations method.
  */
+
+import java.util.ArrayList;
+
 /**
  * The Rook class represents a rook chess piece.
  * It extends the Piece class and inherits its properties and methods.
@@ -80,7 +83,7 @@ public class Rook extends Piece {
      * @param p     the current position of the rook piece
      * @return an array of all possible destinations for the rook piece
      */
-    public Position[] allDestinations(Chess chess, Position p) {
+    public ArrayList<Position> allDestinations(Chess chess, Position p) {
         return Rook.reachablePositions(chess, p);
     }
 
@@ -91,10 +94,10 @@ public class Rook extends Piece {
      * @param p     the current position of the rook piece
      * @return an array of reachable positions for the rook piece
      */
-    public static Position[] reachablePositions(Chess chess, Position p) {
+    public static ArrayList<Position> reachablePositions(Chess chess, Position p) {
         int[] rankOffsets = {1, -1, 0, 0};
         int[] fileOffsets = {0, 0, 1, -1};
-        Position[] result = new Position[0];
+        ArrayList<Position> result = new ArrayList<>();
 
         for (int d = 0; d < 4; d++) {
             int i = p.getRank() + rankOffsets[d];
@@ -104,11 +107,11 @@ public class Rook extends Piece {
                 Position current = Position.generateFromRankAndFile(i, j);
 
                 if (chess.isEmpty(current))
-                    result = Position.appendPositionsToArray(result, current);
+                    result.add(current);
                 else {
                     assert current != null;
                     if (chess.getPieceAt(current).getPieceColor() != chess.getPieceAt(p).getPieceColor())
-                        result = Position.appendPositionsToArray(result, current);
+                        result.add(current);
                     break;
                 }
                 i += rankOffsets[d];

@@ -1,4 +1,7 @@
 package am.aua.chess.core;
+
+import java.util.ArrayList;
+
 /**
  * The Piece class represents a chess piece.
  * It contains methods to get the color of the piece and all possible destinations for the piece.
@@ -46,7 +49,7 @@ public abstract class Piece implements Cloneable {
      * @param p the current position of the piece
      * @return an array of all possible destinations for the piece
      */
-    public abstract Position[] allDestinations(Chess chess, Position p);
+    public abstract ArrayList<Position> allDestinations(Chess chess, Position p);
 
     /**
      * Returns a string representation of the piece.

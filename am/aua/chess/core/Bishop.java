@@ -1,5 +1,7 @@
 package am.aua.chess.core;
 
+import java.util.ArrayList;
+
 /**
  * The Bishop class represents a bishop piece in chess.
  * It contains methods to get all possible destinations for the bishop.
@@ -41,7 +43,7 @@ public class Bishop extends Piece {
      * @param p The current position of the bishop.
      * @return An array of all possible destinations for the bishop.
      */
-    public Position[] allDestinations(Chess chess, Position p) {
+    public ArrayList<Position> allDestinations(Chess chess, Position p) {
         return Bishop.reachablePositions(chess, p);
     }
 
@@ -52,10 +54,10 @@ public class Bishop extends Piece {
      * @param p The current position of the bishop.
      * @return An array of reachable positions for the bishop.
      */
-    public static Position[] reachablePositions(Chess chess, Position p) {
+    public static ArrayList<Position> reachablePositions(Chess chess, Position p) {
         int[] rankOffsets = {1, 1, -1, -1};
         int[] fileOffsets = {1, -1, 1, -1};
-        Position[] result = new Position[0];
+        ArrayList<Position> result = new ArrayList<>();
 
         for (int d = 0; d < 4; d++) {
             int i = p.getRank() + rankOffsets[d];
@@ -64,11 +66,11 @@ public class Bishop extends Piece {
                     j >= 0 && j < Chess.BOARD_FILES) {
                 Position current = Position.generateFromRankAndFile(i, j);
                 if (chess.isEmpty(current))
-                    result = Position.appendPositionsToArray(result, current);
+                    result.add(current);
                 else {
                     assert current != null;
                     if (chess.getPieceAt(current).getPieceColor() != chess.getPieceAt(p).getPieceColor())
-                        result = Position.appendPositionsToArray(result, current);
+                        result.add(current);
 
                     break;
                 }

@@ -21,7 +21,7 @@ public class Main {
 //      ChessConsole chess = new ChessConsole("             pk                  b          PPPPK               ", Chess.PieceColor.WHITE);
 
          ChessConsole chess = new ChessConsole();
-         chess.play();
+         chess.run();
       } catch (Exception e) {
 //         e.printStackTrace();
          System.out.println("An error occurred: " + e.getMessage());

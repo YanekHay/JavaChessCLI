@@ -1,5 +1,7 @@
 package am.aua.chess.core;
 
+import java.util.ArrayList;
+
 /**
  * The Knight class represents a knight piece in chess.
  */
@@ -29,7 +31,7 @@ public class Knight extends Piece {
      * @param p The starting position of the knight.
      * @return An array of Position objects representing the reachable positions.
      */
-    public Position[] allDestinations(Chess chess, Position p){
+    public ArrayList<Position> allDestinations(Chess chess, Position p){
         return Knight.reachablePositions(chess, p);
     }
 
@@ -40,10 +42,10 @@ public class Knight extends Piece {
      * @param p The starting position of the knight.
      * @return An array of Position objects representing the reachable positions.
      */
-    public static Position[] reachablePositions(Chess chess, Position p) {
+    public static ArrayList<Position> reachablePositions(Chess chess, Position p) {
         int[] rankOffsets = {-2, -2, 2, 2, -1, -1, 1, 1};
         int[] fileOffsets = {-1, 1, -1, 1, -2, 2, -2, 2};
-        Position[] positions = new Position[0];
+        ArrayList<Position> positions = new ArrayList<>();
         int row = p.getRank();
         int column = p.getFile();
 
@@ -55,7 +57,7 @@ public class Knight extends Piece {
                 Position current = Position.generateFromRankAndFile(i, j);
                 if (chess.isEmpty(current) || (current != null &&
                         chess.getPieceAt(current).getPieceColor() != chess.getPieceAt(p).getPieceColor())) {
-                    positions = Position.appendPositionsToArray(positions, current);
+                    positions.add(current);
                 }
             }
         }

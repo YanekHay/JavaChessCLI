@@ -1,9 +1,12 @@
 package am.aua.chess.cli;
 
 import am.aua.chess.core.*;
+import am.aua.chess.puzzles.Puzzle;
+import am.aua.chess.puzzles.PuzzleDatabase;
 import am.aua.chess.utils.ArrayTools;
 import am.aua.chess.utils.IllegalArrangementException;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -11,6 +14,7 @@ import java.util.Scanner;
  */
 public class ChessConsole {
     private Chess game;
+    private PuzzleDatabase database = new PuzzleDatabase();
     /**
      * Gets the Chess object representing the game.
      * @return The Chess object representing the game.
@@ -20,10 +24,9 @@ public class ChessConsole {
     }
     /**
      * Constructs a new ChessConsole object.
-     * @throws IllegalArrangementException If the arrangement is invalid.
      */
-    public ChessConsole() throws IllegalArrangementException {
-        game = new Chess();
+    public ChessConsole(){
+        database = new PuzzleDatabase();
     }
 
     /**
@@ -48,10 +51,12 @@ public class ChessConsole {
      * @param pos The position to highlight.
      */
     public void print(Position pos){
+        ArrayList<Position> positions = new ArrayList<>();
         if (pos == null){
-            print(new Position[]{});
+            print(positions);
         } else {
-            print(new Position[]{pos});
+            positions.add(pos);
+            print(positions);
         }
     }
 
@@ -59,7 +64,7 @@ public class ChessConsole {
      * Prints the current state of the chess board with multiple highlighted positions.
      * @param availablePositions The positions to highlight.
      */
-    public void print(Position[] availablePositions){
+    public void print(ArrayList<Position> availablePositions){
         print(null, availablePositions);
     }
 
@@ -68,7 +73,7 @@ public class ChessConsole {
      * @param selectedPosition The position to highlight with yellow.
      * @param availablePositions The positions to highlight.
      */
-    public void print(Position selectedPosition, Position[] availablePositions){
+    public void print(Position selectedPosition, ArrayList<Position> availablePositions){
         // printing the board upside down (for white pieces to occur at the bottom of the board)
         System.out.printf("\n\nTurn: %s    MoveCounts: %d\n\n", (this.game.getTurn()), this.game.getMoveCount() );
         String[][] board = selectedPosition==null?this.prettifyBoard(this.game.getBoard(), availablePositions):this.prettifyBoard(this.game.getBoard(), selectedPosition, availablePositions);
@@ -114,7 +119,9 @@ public class ChessConsole {
      * The empty space is represented by <code>"\u2009\u2009\u200A\u200A\u200A"</code> \ u2009 is a thin space, \ u200A is a hair space.
      */
     private String[][] prettifyBoard(Piece[][] board, Position highlightCell){
-        return prettifyBoard(board, new Position[]{highlightCell});
+        ArrayList<Position> highlightCells = new ArrayList<>(1);
+        highlightCells.add(highlightCell);
+        return prettifyBoard(board, highlightCells);
     }
 
     /**
@@ -123,7 +130,7 @@ public class ChessConsole {
      * @param highlightCells The cells to highlight.
      * @return The prettified board.
      */
-    private String[][] prettifyBoard(Piece[][] board, Position[] highlightCells){
+    private String[][] prettifyBoard(Piece[][] board,ArrayList<Position> highlightCells){
         return prettifyBoard(board, null, highlightCells);
     }
 
@@ -134,13 +141,13 @@ public class ChessConsole {
      * @param highlightCells The cells to highlight.
      * @return The prettified board.
      */
-    private String[][] prettifyBoard(Piece[][] board, Position selectedCell, Position[] highlightCells){
+    private String[][] prettifyBoard(Piece[][] board, Position selectedCell, ArrayList<Position> highlightCells){
         String[][] prettyBoard = new String[board.length][board[0].length];
         String cellColor;
         for (int i=0; i<board.length; i++){
             for (int j=0; j<board[i].length; j++){
                 cellColor = (i+j)%2==1? "\u001b[47;1m" : "\u001b[40;1m";
-                if (ArrayTools.contains(highlightCells, new Position(i,j))){
+                if (highlightCells.contains(new Position(i,j))){
                     cellColor = "\u001b[42;1m\u001b[52;1m";
                 }
                 prettyBoard[i][j] = cellColor + "\u2009" + getPieceSymbol(board[i][j]) + "\u2009" + "\u001b[0m";
@@ -156,10 +163,9 @@ public class ChessConsole {
      * Starts the chess game and handles user input.
      */
     public void play(){
+        print();
         Scanner sc = new Scanner(System.in);
         String inputLine;
-
-        print();
 
         while (!game.isGameOver()){
             System.out.println(game.getTurn() + "'s move");
@@ -181,7 +187,6 @@ public class ChessConsole {
                 }
 
                 p1 = Position.generateFromString(input[0]);
-
                 if (p1 == null || game.getPieceAt(p1) == null) {
                     System.out.println("Invalid position. Please try again.");
                     continue;
@@ -191,7 +196,7 @@ public class ChessConsole {
                     // the opponent's piece are still highlighted
                     if (game.getPieceAt(p1).getPieceColor() != game.getTurn())
                         System.out.println("That piece belongs to the opponent.");
-                    print(p1, game.reachableFrom(Position.generateFromString(input[0])));
+                    print(p1, game.reachableFrom(p1));
                 }
                 else if (input.length == 2){
                     if (game.getPieceAt(p1).getPieceColor() != game.getTurn()) {
@@ -201,10 +206,6 @@ public class ChessConsole {
 
                     p2 = Position.generateFromString(input[1]);
 
-                    if ((game.getPieceAt(p2)!=null) && (game.getPieceAt(p2).getPieceColor() != game.getTurn())) {
-                        System.out.println("That piece belongs to the opponent.");
-                        continue;
-                    }
                     Move m = new Move(p1, p2);
                     System.out.println("MOVE " + m.toString());
                     boolean success = game.performMove(m);
@@ -217,6 +218,47 @@ public class ChessConsole {
         }
     }
 
+    public void run(){
+        Scanner sc = new Scanner(System.in);
+        String inputLine;
+        System.out.println("Welcome to the Chess Console!");
+        printInstructions();
+        inputLine = sc.nextLine();
+        while(!inputLine.equals("q")) {
+            try {
+                if (inputLine.equals("p")) {
+                    game = new Chess();
+                    this.play();
+                } else if (inputLine.equals("l")) {
+                    int databaseSize = database.getSize();
+                    for (int i = 0; i < databaseSize; i++)
+                        System.out.println(i + ": " + database.getPuzzle(i));
+                } else if (inputLine.startsWith("a "))
+                    database.addPuzzlesFromFile(inputLine.substring(2));
+                else if (inputLine.startsWith("p ")) {
+                    int puzzleNumber = Integer.parseInt(inputLine.substring(2));
+                    Puzzle puzzle = database.getPuzzle(puzzleNumber);
+                    game = new Chess(puzzle.getArrangement(), puzzle.getTurn());
+                    this.play();
+                } else
+                    System.out.println("Unknown instruction. Please try again.");
+            } catch (Exception e) {
+                System.out.println("An error occurred: " + e.getMessage());
+                e.printStackTrace();
+            }
+            printInstructions();
+            inputLine = sc.nextLine();
+        }
+        database.save();
+    }
+
+    private void printInstructions(){
+        System.out.println("Input 'p' to play chess.");
+        System.out.println("Input 'l' to list the puzzles in the databse.");
+        System.out.println("Input 'a <filename>' to add new puzzles into the database.");
+        System.out.println("Input 'p <number>' to play a puzzle.");
+        System.out.println("If you want to end the program, input 'q'.");
+    }
     /**
      * Helps for debugging purposes.
      */

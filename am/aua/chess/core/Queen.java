@@ -1,5 +1,7 @@
 package am.aua.chess.core;
 
+import java.util.ArrayList;
+
 /**
  * The Queen class represents a queen chess piece.
  */
@@ -29,7 +31,7 @@ public class Queen extends Piece {
      * @param p the current position of the Queen piece
      * @return an array of Position objects representing the reachable positions
      */
-    public Position[] allDestinations(Chess chess, Position p) {
+    public ArrayList<Position> allDestinations(Chess chess, Position p) {
         return Queen.reachablePositions(chess, p);
     }
 
@@ -40,10 +42,10 @@ public class Queen extends Piece {
      * @param p the current position of the Queen piece
      * @return an array of Position objects representing the reachable positions
      */
-    public static Position[] reachablePositions(Chess chess, Position p) {
+    public static ArrayList<Position> reachablePositions(Chess chess, Position p) {
         int[] rankOffsets = {-1, -1, 1, 1, 0, 0, -1, 1};
         int[] fileOffsets = {-1, 1, -1, 1, -1, 1, 0, 0};
-        Position[] result = new Position[0];
+        ArrayList<Position> result = new ArrayList<>();
 
         for (int d = 0; d < rankOffsets.length; d++) {
             int i = p.getRank() + rankOffsets[d];
@@ -52,11 +54,11 @@ public class Queen extends Piece {
                     j >= 0 && j < Chess.BOARD_FILES) {
                 Position current = Position.generateFromRankAndFile(i, j);
                 if (chess.isEmpty(current))
-                    result = Position.appendPositionsToArray(result, current);
+                    result.add(current);
                 else {
                     assert current != null;
                     if (chess.getPieceAt(current).getPieceColor() != chess.getPieceAt(p).getPieceColor())
-                        result = Position.appendPositionsToArray(result, current);
+                        result.add(current);
                     break;
                 }
                 i += rankOffsets[d];
