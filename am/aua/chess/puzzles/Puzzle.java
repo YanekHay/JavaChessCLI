@@ -33,6 +33,19 @@ public final class Puzzle implements Comparable<Puzzle>{
     }
 
     /**
+     * Copy Constructor for creating a Puzzle object by copying another Puzzle object.
+     * @param that the Puzzle object to be copied
+     */
+    public Puzzle(Puzzle that) {
+        if (that == null)
+            throw new NullPointerException();
+        this.arrangement = that.arrangement;
+        this.turn = that.turn;
+        this.difficulty = that.difficulty;
+        this.description = that.description;
+    }
+
+    /**
      * Gets the chess board arrangement of the puzzle.
      * 
      * @return the chess board arrangement
@@ -159,6 +172,9 @@ public final class Puzzle implements Comparable<Puzzle>{
         return false;
     }
 
+    /**
+     * Returns a string representation of the puzzle.
+     */
     public String toString(){
         return this.arrangement + "," + this.turn + "," + this.difficulty + "\n" + this.description;
     }

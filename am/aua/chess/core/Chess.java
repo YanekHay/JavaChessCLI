@@ -3,6 +3,7 @@ import am.aua.chess.utils.ArrayTools;
 import am.aua.chess.utils.IllegalArrangementException;
 import am.aua.chess.utils.InvalidNumberOfKingsException;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -302,7 +303,7 @@ public class Chess implements Cloneable{
     public boolean isKingUnderAttack(PieceColor kingColor) {
         Position kingPosition = null;
         PieceColor opponentColor;
-        ArrayList<Position> p = new ArrayList<>();
+        ArrayList<Position> p;
 
         //find the king
         for (int i = 0; i < BOARD_RANKS; i++)
@@ -320,8 +321,8 @@ public class Chess implements Cloneable{
 
         p = getAllDestinationsByColor(opponentColor);
 
-        for (int i = 0; i < p.size(); i++)
-            if (p.get(i).equals(kingPosition))
+        for (Position pos : p)
+            if (pos.equals(kingPosition))
                 return true;
 
         return false;
