@@ -7,6 +7,8 @@ public class BoardSquare extends JButton {
     private final int y;
     private final boolean isWhite;
     public static final int SIZE = 64;
+    private static final int EMPTY_BORDER_SIZE = 2;
+    private static final int SELECTED_BORDER_SIZE = 5;
 
     public BoardSquare(int x, int y, boolean isWhite) {
         super();
@@ -17,6 +19,7 @@ public class BoardSquare extends JButton {
         this.setLocation(x*SIZE, y*SIZE);
         this.isWhite = isWhite;
         this.setColor();
+        this.setBorderColor();
     }
 
     public int[] getCoordinate() {
@@ -60,6 +63,19 @@ public class BoardSquare extends JButton {
         }
     }
 
+    public void setSelected(boolean isSelected) {
+        if (isSelected)
+            this.setBorderColor(Maps.colorMap.get("selected"));
+        else
+            this.setBorderColor();
+    }
+
+    private void setBorderColor(Color color) {
+        this.setBorder(BorderFactory.createLineBorder(color, SELECTED_BORDER_SIZE));
+    }
+    private void setBorderColor() {
+        this.setBorder(BorderFactory.createLineBorder(Maps.colorMap.get("cellBorderColor"), EMPTY_BORDER_SIZE));
+    }
     public int getRank() {
         return this.x;
     }

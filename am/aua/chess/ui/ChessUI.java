@@ -1,19 +1,17 @@
 package am.aua.chess.ui;
 
-import am.aua.chess.core.Chess;
 import am.aua.chess.core.Move;
 import am.aua.chess.core.Piece;
+import am.aua.chess.core.Chess;
 import am.aua.chess.core.Position;
-import am.aua.chess.utils.IllegalArrangementException;
 import am.aua.chess.utils.KingUnderAttackException;
 
-import javax.swing.*;
-import javax.swing.plaf.basic.BasicOptionPaneUI;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-public class ChessUI  extends JFrame {
+import java.awt.event.ActionEvent;
+public class ChessUI  extends JFrame implements ActionListener {
     private Chess game;
     private JPanel boardPanel = new JPanel();
     private BoardSquare[][] board = new BoardSquare[Chess.BOARD_RANKS][Chess.BOARD_FILES];
@@ -43,29 +41,34 @@ public class ChessUI  extends JFrame {
                 if (piece != null){
                     board[i][j].setPiece(piece.toString());
                 }
-                board[i][j].addActionListener(this::onSquareClick);
+                board[i][j].addActionListener(this);
                 this.boardPanel.add(board[i][j]);
             }
         }
     }
 
-    private void onSquareClick(ActionEvent event) {
-        BoardSquare square = (BoardSquare) event.getSource();
-        int rank = square.getRank();
-        int file = square.getFile();
-        Position position = new Position(rank, file);
+    private void boardClicked(int[] coordinates) {
+        int rank = coordinates[0];
+        int file = coordinates[1];
+        Position position = Position.generateFromRankAndFile(rank, file);
+        if (position==null){
+            return;
+        }
         Piece piece = game.getPieceAt(position);
 
-        if (selectedPosition==null && piece!=null){
-            if (piece.getPieceColor() != game.getTurn()) {
-                JOptionPane.showMessageDialog(this.boardPanel, "That piece belongs to the opponent.", "Not Your Turn", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
+        if (selectedPosition==null){
+            if (piece != null) {
+                if (piece.getPieceColor() != game.getTurn()) {
+                    JOptionPane.showMessageDialog(this.boardPanel, "That piece belongs to the opponent.", "Not Your Turn", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
 
-            this.highlightedPositions = piece.allDestinations(this.game, position);
-            this.selectedPosition = position;
-            for(Position p : highlightedPositions){
-                board[p.getRank()][p.getFile()].setHighlight(true);
+                this.highlightedPositions = piece.allDestinations(this.game, position);
+                this.selectedPosition = position;
+                board[rank][file].setSelected(true);
+                for(Position p : highlightedPositions){
+                    board[p.getRank()][p.getFile()].setHighlight(true);
+                }
             }
         }
         else {
@@ -82,6 +85,7 @@ public class ChessUI  extends JFrame {
                 board[p.getRank()][p.getFile()].setHighlight(false);
             }
             highlightedPositions.clear();
+            board[this.selectedPosition.getRank()][this.selectedPosition.getFile()].setSelected(false);
             selectedPosition = null;
             updatePieces();
         }
@@ -100,5 +104,11 @@ public class ChessUI  extends JFrame {
                 }
             }
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        BoardSquare square = (BoardSquare) event.getSource();
+        boardClicked(square.getCoordinate());
     }
 }
