@@ -5,6 +5,7 @@ import am.aua.chess.core.Move;
 import am.aua.chess.core.Piece;
 import am.aua.chess.core.Position;
 import am.aua.chess.utils.IllegalArrangementException;
+import am.aua.chess.utils.KingUnderAttackException;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicOptionPaneUI;
@@ -48,38 +49,46 @@ public class ChessUI  extends JFrame {
         }
     }
 
-    private void onSquareClick(ActionEvent e) {
-        BoardSquare square = (BoardSquare) e.getSource();
+    private void onSquareClick(ActionEvent event) {
+        BoardSquare square = (BoardSquare) event.getSource();
         int rank = square.getRank();
         int file = square.getFile();
         Position position = new Position(rank, file);
         Piece piece = game.getPieceAt(position);
 
-        if (selectedPosition==null){
+        if (selectedPosition==null && piece!=null){
+            if (piece.getPieceColor() != game.getTurn()) {
+                JOptionPane.showMessageDialog(this.boardPanel, "That piece belongs to the opponent.", "Not Your Turn", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
             this.highlightedPositions = piece.allDestinations(this.game, position);
             this.selectedPosition = position;
             for(Position p : highlightedPositions){
-                board[p.getRank()][p.getFile()].setHighlight();
+                board[p.getRank()][p.getFile()].setHighlight(true);
             }
         }
         else {
             if (highlightedPositions.contains(position)) {
-                game.performMove(new Move(selectedPosition, position));
+                try{
+                    game.performMove(new Move(selectedPosition, position));
+                }
+                catch (KingUnderAttackException e){
+                    JOptionPane.showMessageDialog(this.boardPanel, e.getMessage(), "King Under Attack", JOptionPane.INFORMATION_MESSAGE);
+                }
+
             }
             for (Position p : highlightedPositions) {
-                board[p.getRank()][p.getFile()].setColor();
+                board[p.getRank()][p.getFile()].setHighlight(false);
             }
             highlightedPositions.clear();
             selectedPosition = null;
-
+            updatePieces();
         }
-        updateBoard();
-
-
     }
 
-    public void updateBoard(){
-        for (int i = Chess.BOARD_RANKS-1; i>=0; i--) {
+    public void updatePieces(){
+        for (int i = 0; i<Chess.BOARD_RANKS; i++) {
             for (int j = 0; j< Chess.BOARD_FILES; j++) {
                 Position p = new Position(i, j);
                 Piece piece = game.getPieceAt(p);
@@ -91,8 +100,5 @@ public class ChessUI  extends JFrame {
                 }
             }
         }
-    }
-    public static void main(String[] args) {
-        new ChessUI();
     }
 }

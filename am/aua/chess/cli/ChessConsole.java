@@ -5,6 +5,7 @@ import am.aua.chess.puzzles.Puzzle;
 import am.aua.chess.puzzles.PuzzleDatabase;
 import am.aua.chess.utils.ArrayTools;
 import am.aua.chess.utils.IllegalArrangementException;
+import am.aua.chess.utils.KingUnderAttackException;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -208,7 +209,14 @@ public class ChessConsole {
 
                     Move m = new Move(p1, p2);
                     System.out.println("MOVE " + m.toString());
-                    boolean success = game.performMove(m);
+                    boolean success;
+                    try{
+                        success = game.performMove(m);
+                    }
+                    catch (KingUnderAttackException e){
+                        System.out.println(e.getMessage());
+                        success = false;
+                    }
                     if (!success){
                         System.out.println("Invalid move. Please try again.");
                     }

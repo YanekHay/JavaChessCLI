@@ -3,6 +3,7 @@ package am.aua.chess;
 import am.aua.chess.cli.ChessConsole;
 import am.aua.chess.core.Chess;
 import am.aua.chess.puzzles.Puzzle;
+import am.aua.chess.ui.ChessUI;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,15 +18,24 @@ public class Main {
     * @param args The command line arguments.
     */
    public static void main(String[] args) {
-      try {
-//      ChessConsole chess = new ChessConsole("             pk                  b          PPPPK               ", Chess.PieceColor.WHITE);
-
-         ChessConsole chess = new ChessConsole();
-         chess.run();
-      } catch (Exception e) {
-//         e.printStackTrace();
-         System.out.println("An error occurred: " + e.getMessage());
-         System.exit(-1);
+      if (args.length>0){
+         if (args[0].equals("-console")){
+            try {
+               ChessConsole chess = new ChessConsole();
+               chess.run();
+            } catch (Exception e) {
+               System.out.println("An error occurred: " + e.getMessage());
+               System.exit(-1);
+            }
+         }
+         else{
+            System.out.println("No such option: " + args[0] + "\nUsage: java  am.aua.chess.Main [-console]");
+            System.exit(-1);
+         }
       }
+      else{
+         new ChessUI();
+      }
+
    }
 }

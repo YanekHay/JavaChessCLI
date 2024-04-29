@@ -1,14 +1,10 @@
 package am.aua.chess.ui;
-
 import am.aua.chess.utils.Maps;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-
 public class BoardSquare extends JButton {
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
     private final boolean isWhite;
     public static final int SIZE = 64;
 
@@ -56,12 +52,12 @@ public class BoardSquare extends JButton {
         this.setIcon(null);
     }
 
-    public void setHighlight() {
-        this.setBackground(Maps.colorMap.get("highlight"));
-    }
-
-    public void removeHighlight() {
-        this.setColor();
+    public void setHighlight(boolean isHighlighted) {
+        if (isHighlighted) {
+            this.setBackground(Maps.colorMap.get("highlight"));
+        } else {
+            this.setColor();
+        }
     }
 
     public int getRank() {

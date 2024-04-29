@@ -17,7 +17,7 @@ public class Maps {
 
     public static final Map<String, Color> colorMap = Map.of(
             "light", new Color(234, 228, 223),
-            "dark", new Color(33, 30, 30),
+            "dark", new Color(27, 100, 39),
             "highlight", new Color(156, 46, 46)
 
     );

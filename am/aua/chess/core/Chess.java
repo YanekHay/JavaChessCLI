@@ -2,6 +2,7 @@ package am.aua.chess.core;
 import am.aua.chess.utils.ArrayTools;
 import am.aua.chess.utils.IllegalArrangementException;
 import am.aua.chess.utils.InvalidNumberOfKingsException;
+import am.aua.chess.utils.KingUnderAttackException;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -259,7 +260,7 @@ public class Chess implements Cloneable{
      * @param move The move to perform.
      * @return true if the move was performed successfully, false otherwise.
      */
-    public boolean performMove(Move move){
+    public boolean performMove(Move move) throws KingUnderAttackException{
         Position destination = move.getDestination();
         Position origin = move.getOrigin();
         if (this.getPieceAt(origin)==null){
@@ -290,7 +291,7 @@ public class Chess implements Cloneable{
 
             if (isKingUnderAttack(this.getTurn())) {
                 this.board = boardCopy;
-                return false;
+                throw new KingUnderAttackException();
             }
             this.moveCount++;
             return true;
