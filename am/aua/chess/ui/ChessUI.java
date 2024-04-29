@@ -15,13 +15,14 @@ public class ChessUI  extends JFrame implements ActionListener {
     private Chess game;
     private JPanel boardPanel = new JPanel();
     private BoardSquare[][] board = new BoardSquare[Chess.BOARD_RANKS][Chess.BOARD_FILES];
-    public static final int WINDOW_SIZE = 800;
+    public static final int WINDOW_HEIGHT = BoardSquare.SIZE* Chess.BOARD_RANKS+50;
+    public static final int WINDOW_WIDTH = BoardSquare.SIZE* Chess.BOARD_FILES+50;
     private ArrayList<Position> highlightedPositions = new ArrayList<>();
     private Position selectedPosition;
     public ChessUI() {
         this.game = new Chess();
         this.setTitle("Chess");
-        this.setSize(WINDOW_SIZE, WINDOW_SIZE);
+        this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
         this.setLayout(new FlowLayout());
         boardPanel.setLayout(new GridLayout(Chess.BOARD_RANKS, Chess.BOARD_FILES));

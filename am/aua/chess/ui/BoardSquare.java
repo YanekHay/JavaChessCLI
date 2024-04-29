@@ -7,7 +7,8 @@ public class BoardSquare extends JButton {
     private final int y;
     private final boolean isWhite;
     public static final int SIZE = 64;
-    private static final int EMPTY_BORDER_SIZE = 2;
+    public static final int ICON_SIZE = SIZE*3/4;
+    private static final int EMPTY_BORDER_SIZE = 1;
     private static final int SELECTED_BORDER_SIZE = 5;
 
     public BoardSquare(int x, int y, boolean isWhite) {
@@ -16,6 +17,7 @@ public class BoardSquare extends JButton {
         this.y = y;
         this.setSize(SIZE, SIZE);
         this.setPreferredSize(new Dimension(SIZE, SIZE));
+        this.setLayout(new BorderLayout());
         this.setLocation(x*SIZE, y*SIZE);
         this.isWhite = isWhite;
         this.setColor();
@@ -38,16 +40,17 @@ public class BoardSquare extends JButton {
         }
     }
     public void setPiece(String piece) {
-
         if (piece == null) {
             this.setIcon(null);
+            return;
         }
         if (!Maps.pieceNameMap.containsKey(piece.toUpperCase())){
             this.setIcon(null);
         }
         else {
             String pieceFileName = Maps.pieceNameMap.get(piece.toUpperCase()) + (Character.isUpperCase(piece.charAt(0))? "W" : "B");
-            this.setIcon(new ImageIcon("am/aua/chess/ui/gfx/" + pieceFileName +".png"));
+            Image img = new ImageIcon("am/aua/chess/ui/gfx/" + pieceFileName +".png").getImage().getScaledInstance(ICON_SIZE, ICON_SIZE, Image.SCALE_SMOOTH);
+            this.setIcon(new ImageIcon(img));
         }
     }
 
