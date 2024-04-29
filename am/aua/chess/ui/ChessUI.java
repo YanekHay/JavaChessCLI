@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
  * It extends JFrame and implements ActionListener to handle user interactions.
  */
 public class ChessUI  extends JFrame implements ActionListener {
+
     private final Chess game;
     private final JPanel boardPanel = new JPanel();
     private final BoardSquare[][] board = new BoardSquare[Chess.BOARD_RANKS][Chess.BOARD_FILES];

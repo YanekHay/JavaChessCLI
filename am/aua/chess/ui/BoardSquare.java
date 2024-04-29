@@ -8,13 +8,13 @@ import java.awt.*;
  * It extends JButton and contains information about the cell's position, color, and piece.
  */
 public class BoardSquare extends JButton {
-    private final int x;
-    private final int y;
-    private final boolean isWhite;
-    public static final int SIZE = 64;
-    public static final int ICON_SIZE = SIZE*3/4;
-    private static final int EMPTY_BORDER_SIZE = 1;
-    private static final int SELECTED_BORDER_SIZE = 5;
+    private final int x; // Column
+    private final int y; // Row
+    private final boolean isWhite; // To Determine the color of cell
+    public static final int SIZE = 64; // The size of cell
+    public static final int ICON_SIZE = SIZE*3/4; // The size of icon in cell
+    private static final int NON_SELECTED_CELL_BORDER_SIZE = 1; // The border size for non-selected cell
+    private static final int SELECTED_BORDER_SIZE = 5; // The border size for selected cell
 
     /**
      * The constructor for the BoardSquare class.
@@ -128,7 +128,7 @@ public class BoardSquare extends JButton {
      * This method sets the border color of the cell to the default color.
      */
     private void setBorderColor() {
-        this.setBorder(BorderFactory.createLineBorder(Maps.colorMap.get("cellBorderColor"), EMPTY_BORDER_SIZE));
+        this.setBorder(BorderFactory.createLineBorder(Maps.colorMap.get("cellBorderColor"), NON_SELECTED_CELL_BORDER_SIZE));
     }
 
     /**

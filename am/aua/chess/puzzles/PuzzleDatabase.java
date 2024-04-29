@@ -4,7 +4,6 @@ import am.aua.chess.utils.MalformedPuzzleException;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -13,7 +12,7 @@ import java.util.Scanner;
  * retrieving puzzles by index, and adding puzzles from a file to the database.
  */
 public class PuzzleDatabase {
-    public static final String DATABASE_PATH = "am/aua/chess/puzzles/database.txt";
+    public static final String DATABASE_PATH = "am/aua/chess/puzzles/database.txt"; // Path to the database file
     private ArrayList<Puzzle> puzzles;
 
     /**
@@ -42,6 +41,7 @@ public class PuzzleDatabase {
                 this.puzzles.add(new Puzzle(arrangements, description));
             }
             this.puzzles.sort(Puzzle::compareTo);
+            dbReader.close();
         }
         catch (MalformedPuzzleException e){
             System.out.println("The content of the database file should start with a line of single integer.");
@@ -107,6 +107,7 @@ public class PuzzleDatabase {
                 if (!this.puzzles.contains(puzzle))
                     this.puzzles.add(puzzle);
             }
+            inputStream.close();
         }
         catch (Exception e){
             System.out.println("An error occurred: " + e.getMessage());

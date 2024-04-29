@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * The class is extended by specific piece classes such as Bishop, King, Knight, Pawn, Queen, and Rook.
  */
 public abstract class Piece implements Cloneable {
-    private final Chess.PieceColor color;
+    private final Chess.PieceColor color; // The color of piece
 
     /**
      * Constructs a new Piece object with the specified color.
