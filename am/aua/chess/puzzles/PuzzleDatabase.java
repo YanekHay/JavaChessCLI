@@ -1,5 +1,7 @@
 package am.aua.chess.puzzles;
 
+import am.aua.chess.utils.MalformedPuzzleException;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -41,7 +43,7 @@ public class PuzzleDatabase {
             }
             this.puzzles.sort(Puzzle::compareTo);
         }
-        catch (InputMismatchException e){
+        catch (MalformedPuzzleException e){
             System.out.println("The content of the database file should start with a line of single integer.");
         }
         catch (Exception e){

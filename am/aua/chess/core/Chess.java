@@ -42,9 +42,14 @@ public class Chess implements Cloneable{
      * Initializes the move count to 0 and calls the initializeBoard method.
      * @throws IllegalArrangementException If the arrangement is invalid.
      */
-    public Chess() throws IllegalArrangementException {
+    public Chess() {
         moveCount = 0;
-        this.fillBoardFromString("RNBQKBNRPPPPPPPP                                pppppppprnbqkbnr");
+        try{
+            this.fillBoardFromString("RNBQKBNRPPPPPPPP                                pppppppprnbqkbnr");
+        }
+        catch (IllegalArrangementException e){
+            System.out.println("Invalid arrangement");
+        }
     }
 
     /**
