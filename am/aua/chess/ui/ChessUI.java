@@ -12,8 +12,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 public class ChessUI  extends JFrame implements ActionListener {
-    private Chess game;
-    private JPanel boardPanel = new JPanel();
+    private final Chess game;
+    private final JPanel boardPanel = new JPanel();
     private BoardSquare[][] board = new BoardSquare[Chess.BOARD_RANKS][Chess.BOARD_FILES];
     public static final int WINDOW_HEIGHT = BoardSquare.SIZE* Chess.BOARD_RANKS+50;
     public static final int WINDOW_WIDTH = BoardSquare.SIZE* Chess.BOARD_FILES+50;
