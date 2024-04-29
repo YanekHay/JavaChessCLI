@@ -13,7 +13,7 @@ import java.util.Scanner;
  * retrieving puzzles by index, and adding puzzles from a file to the database.
  */
 public class PuzzleDatabase {
-    public static final String databasePath = "am/aua/chess/puzzles/database.txt";
+    public static final String DATABASE_PATH = "am/aua/chess/puzzles/database.txt";
     private ArrayList<Puzzle> puzzles;
 
     /**
@@ -32,7 +32,7 @@ public class PuzzleDatabase {
      */
     public void load(){
         try {
-            Scanner dbReader = new Scanner(new File(PuzzleDatabase.databasePath));
+            Scanner dbReader = new Scanner(new File(PuzzleDatabase.DATABASE_PATH));
             int puzzleCount = dbReader.nextInt();
             dbReader.nextLine();
             this.puzzles = new ArrayList<>(puzzleCount);
@@ -66,7 +66,7 @@ public class PuzzleDatabase {
      */
     public void save(){
         try {
-            PrintWriter outputStream = new PrintWriter(new FileOutputStream("am/aua/chess/puzzles/database.txt", false));
+            PrintWriter outputStream = new PrintWriter(new FileOutputStream(DATABASE_PATH, false));
             outputStream.println(this.getSize());
             for (Puzzle puzzle: this.puzzles){
                 outputStream.println(puzzle);
